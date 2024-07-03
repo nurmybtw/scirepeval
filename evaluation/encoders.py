@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class EncoderFactory:
     def __init__(self, base_checkpoint: str = None, adapters_load_from: Union[str, Dict] = None,
                  fusion_load_from: str = None, all_tasks: list = None):
-        self.base_checkpoint = f"{base_checkpoint}/model" if os.path.isdir(base_checkpoint) else base_checkpoint
+        self.base_checkpoint = f"{base_checkpoint}" if os.path.isdir(base_checkpoint) else base_checkpoint
         self.all_tasks = all_tasks
         self.adapters_load_from = f"{adapters_load_from}/model/adapters" if (type(
             adapters_load_from) == str and os.path.isdir(
@@ -57,7 +57,7 @@ class Model:
         if torch.cuda.is_available():
             self.encoder.to('cuda')
         self.encoder.eval()
-        tokenizer_checkpoint = f"{base_checkpoint}/tokenizer" if os.path.isdir(base_checkpoint) else base_checkpoint
+        tokenizer_checkpoint = f"{base_checkpoint}" if os.path.isdir(base_checkpoint) else base_checkpoint
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_checkpoint)
         self.use_ctrl_codes = use_ctrl_codes
         self.reqd_token_idx = 0 if not use_ctrl_codes else 1

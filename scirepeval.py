@@ -21,8 +21,8 @@ pl.seed_everything(42, workers=True)
 
 class SciRepEval:
 
-    def __init__(self, tasks_config: str = "scirepeval_tasks.jsonl", task_list: List[str] = None,
-                 task_formats: List[str] = None, batch_size: int = 32):
+    def __init__(self, tasks_config: str = "../content/scirepeval/scirepeval_tasks.jsonl", task_list: List[str] = None,
+                 task_formats: List[str] = None, batch_size: int = 8):
         tasks_dict = dict()
         task_by_formats = dict()
         with open(tasks_config, encoding="utf-8") as f:
@@ -120,11 +120,11 @@ class SciRepEval:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--tasks-config', help='path to the task config file', default="scirepeval_tasks.jsonl")
+    parser.add_argument('--tasks-config', help='path to the task config file', default="../content/scirepeval/scirepeval_tasks.jsonl")
     parser.add_argument('--mtype', help='Model variant to be used (default, pals, adapters, fusion)', default="default")
     parser.add_argument('--gpt3-model', help='Name of embedding model in case of using openai api', default=None)
     parser.add_argument('--model', '-m', help='HuggingFace model to be used')
-    parser.add_argument('--batch-size', type=int, default=32, help='batch size')
+    parser.add_argument('--batch-size', type=int, default=8, help='batch size')
     parser.add_argument('--ctrl-tokens', action='store_true', default=False, help='use control codes for tasks')
     parser.add_argument('--adapters-dir', help='path to the adapter checkpoints', default=None)
     parser.add_argument('--fusion-dir', help='path to the fusion checkpoints', default=None)
@@ -152,5 +152,5 @@ if __name__ == "__main__":
             pooling_mode=args.pooling_mode,
             use_fp16=args.fp16
         )
-    evaluator = SciRepEval(tasks_config=args.tasks_config, batch_size=args.batch_size)
+    evaluator = SciRepEval(tasks_config=args.tasks_config, batch_size=args.batch_size, task_list=["Paper-Reviewer Matching"])
     evaluator.evaluate(model, args.output)
